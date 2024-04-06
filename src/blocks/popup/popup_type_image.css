@@ -1,0 +1,12 @@
+.popup_type_image {
+  width: 75vw; /* ширина содержимого 75% от ширины экрана */
+  min-height: 75vh; /* минимальная высота содержимого 75% от высоты экрана */
+  background-color: #fff;
+  border-radius: 10px;
+  position: relative;
+  box-sizing: border-box;
+  padding: 34px 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

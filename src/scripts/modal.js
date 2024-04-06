@@ -14,3 +14,18 @@ export function handleEscClose(event) {
     closePopup(openedPopup);
   }
 }
+
+document.querySelectorAll(".popup").forEach((popup) => {
+  popup.addEventListener("click", (event) => {
+    if (event.target === popup) {
+      closePopup(popup);
+    }
+  });
+});
+
+document.querySelectorAll(".popup__close").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const popup = event.target.closest(".popup");
+    closePopup(popup);
+  });
+});

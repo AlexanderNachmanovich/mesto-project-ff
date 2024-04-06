@@ -13,17 +13,18 @@
     <div class="page__content">
       <header class="header page__section">
         <img
-          src="images/logo.svg"
-          alt="Логотип проекта масто"
+          src="<%= require('./images/logo.svg') %>"
+          alt="Логотип проекта место"
           class="logo header__logo"
         />
       </header>
       <main class="content">
         <section class="profile page__section">
-          <div
+          <img
+            src="<%= require('./images/avatar.jpg') %>"
+            alt="Аватар пользователя"
             class="profile__image"
-            style="background-image: url(&quot;images/avatar.jpg&quot;)"
-          ></div>
+          />
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
             <button class="profile__edit-button" type="button"></button>

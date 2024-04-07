@@ -1,6 +1,7 @@
 // index.js
-import { createCard, deleteCard, toggleLike, initialCards } from "./cards.js";
+import { initialCards } from "./cards.js";
 import { openPopup, closePopup, handleEscClose } from "./modal.js";
+import { createCard, deleteCard, toggleLike } from "./card.js";
 import "../index.css";
 import "../images/avatar.jpg";
 import "../images/logo.svg";
@@ -13,19 +14,17 @@ const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const nameInput = document.querySelector(".popup__input_type_name");
 const jobInput = document.querySelector(".popup__input_type_description");
-
-// Переменные для формы добавления карточки
+const imagePopupImage = document.querySelector(
+  ".popup_type_image .popup__image",
+);
+const imagePopupCaption = document.querySelector(
+  ".popup_type_image .popup__caption",
+);
 const formAddCard = document.querySelector(".popup_type_new-card .popup__form");
 const cardNameInput = formAddCard.querySelector(".popup__input_type_card-name");
 const cardLinkInput = formAddCard.querySelector(".popup__input_type_url");
 
 function showImagePopup(name, link) {
-  const imagePopupImage = document.querySelector(
-    ".popup_type_image .popup__image",
-  );
-  const imagePopupCaption = document.querySelector(
-    ".popup_type_image .popup__caption",
-  );
   imagePopupImage.src = link;
   imagePopupImage.alt = `Изображение ${name}`;
   imagePopupCaption.textContent = name;
@@ -75,4 +74,19 @@ formEditProfile.addEventListener("submit", (evt) => {
   profileName.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
   closePopup(editPopup);
+});
+
+document.querySelectorAll(".popup").forEach((popup) => {
+  popup.addEventListener("click", (event) => {
+    if (event.target === popup) {
+      closePopup(popup);
+    }
+  });
+});
+
+document.querySelectorAll(".popup__close").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const popup = event.target.closest(".popup");
+    closePopup(popup);
+  });
 });

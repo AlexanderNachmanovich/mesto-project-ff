@@ -1,6 +1,6 @@
 # Проектная работа Mesto
 
-Проект по итогам шестого спринта в [Я.Практикум](https://practicum.yandex.ru) по профессии Веб-разработчик.
+Проект по итогам седьмого спринта в [Я.Практикум](https://practicum.yandex.ru) по профессии Веб-разработчик.
 
 
 [Ссылка на репозиторий](https://github.com/AlexandrNachmanovich/mesto-project-ff/)  

@@ -100,7 +100,6 @@ function setEventListeners() {
       });
   });
 
-  // В обработчике submit формы добавления новой карточки
   formAddCard.addEventListener("submit", (evt) => {
     evt.preventDefault();
     const submitButton = formAddCard.querySelector(".popup__button");

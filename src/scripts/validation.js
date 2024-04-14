@@ -1,6 +1,3 @@
-// Функция, показывающая ошибку
-import { validationSettings } from "./index.js";
-
 const showInputError = (
   formElement,
   inputElement,
@@ -13,7 +10,6 @@ const showInputError = (
   errorElement.classList.add(validationSettings.errorClass);
 };
 
-// Функция, скрывающая ошибку
 const hideInputError = (formElement, inputElement, validationSettings) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(validationSettings.inputErrorClass);
@@ -21,7 +17,6 @@ const hideInputError = (formElement, inputElement, validationSettings) => {
   errorElement.textContent = "";
 };
 
-// Функция, проверяющая на ошибку
 const isValid = (formElement, inputElement, validationSettings) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
@@ -61,7 +56,6 @@ const toggleButtonState = (inputList, buttonElement, validationSettings) => {
   }
 };
 
-// Функция, навешивающая обработчики на массив инпутов
 const setEventListeners = (formElement, validationSettings) => {
   const inputList = Array.from(
     formElement.querySelectorAll(validationSettings.inputSelector),

@@ -48,20 +48,6 @@ export const deleteCardFromServer = (cardId) => {
   }).then(handleResponse);
 };
 
-export const likeCardOnServer = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "PUT",
-    headers: config.headers,
-  }).then(handleResponse);
-};
-
-export const unlikeCardOnServer = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "DELETE",
-    headers: config.headers,
-  }).then(handleResponse);
-};
-
 export const updateAvatar = (avatarLink) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
@@ -78,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((err) => console.error("Ошибка при загрузке данных:", err));
 });
 
-// Добавьте эти функции в api.js
 export const addLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",

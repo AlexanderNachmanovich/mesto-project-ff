@@ -1,18 +1,16 @@
-import { openPopup, closePopup, handleEscClose } from "./modal.js";
+import { openPopup, closePopup } from "./modal.js";
+import { createCard } from "./card.js";
 import {
-  createCard,
-  deleteCard,
-  toggleLike,
-  deleteCardFromServer,
-} from "./card.js";
-import {
-  getUserInfo,
-  getCards,
-  updateProfile,
   createCardOnServer,
+  getCards,
+  getUserInfo,
   updateAvatar,
+  updateProfile,
+  addLike,
+  removeLike,
+  deleteCardFromServer,
 } from "./api.js";
-import { validationSettings, enableValidation } from "./validation.js";
+import { enableValidation } from "./validation.js";
 import "../index.css";
 import "../images/avatar.jpg";
 import "../images/logo.svg";
@@ -34,6 +32,16 @@ const avatarPopup = document.querySelector(".popup_type-avatar");
 const formAvatarUpdate = document.querySelector(
   '.popup__form[name="avatar-form"]',
 );
+
+export const validationSettings = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
 export function showImagePopup(name, link) {
   const imagePopupImage = document.querySelector(
     ".popup_type_image .popup__image",
@@ -42,7 +50,7 @@ export function showImagePopup(name, link) {
     ".popup_type_image .popup__caption",
   );
   imagePopupImage.src = link;
-  imagePopupImage.alt = `${name}`;
+  imagePopupImage.alt = name;
   imagePopupCaption.textContent = name;
   openPopup(imagePopup);
 }
@@ -51,11 +59,33 @@ document.querySelector(".profile__image").addEventListener("click", () => {
   openPopup(avatarPopup);
 });
 
+function handleLike(data, likeButton) {
+  const isLiked = likeButton.classList.contains("card__like-button_is-active");
+  const action = isLiked ? removeLike : addLike;
+  action(data._id)
+    .then((updatedData) => {
+      likeButton.classList.toggle("card__like-button_is-active", !isLiked);
+      const likeCountElement = likeButton.nextElementSibling;
+      likeCountElement.textContent = updatedData.likes.length;
+    })
+    .catch((err) => console.error("Ошибка при изменении статуса лайка:", err));
+}
+
+function handleDelete(data, cardElement) {
+  deleteCardFromServer(data._id)
+    .then(() => cardElement.remove())
+    .catch((err) => console.error("Ошибка при удалении карточки:", err));
+}
+
+function handleImageClick(data) {
+  showImagePopup(data.name, data.link);
+}
+
 function setEventListeners() {
   formEditProfile.addEventListener("submit", (evt) => {
     evt.preventDefault();
     const submitButton = formEditProfile.querySelector(".popup__button");
-    submitButton.textContent = "Сохранение..."; // Изменение текста кнопки
+    submitButton.textContent = "Сохранение...";
     updateProfile(nameInput.value, jobInput.value)
       .then((updatedUserData) => {
         profileName.textContent = updatedUserData.name;
@@ -70,13 +100,19 @@ function setEventListeners() {
       });
   });
 
+  // В обработчике submit формы добавления новой карточки
   formAddCard.addEventListener("submit", (evt) => {
     evt.preventDefault();
     const submitButton = formAddCard.querySelector(".popup__button");
-    submitButton.textContent = "Сохранение..."; // Изменение текста кнопки на "Сохранение..."
+    submitButton.textContent = "Сохранение...";
     createCardOnServer(cardNameInput.value, cardLinkInput.value)
       .then((newCardData) => {
-        const newCardElement = createCard(newCardData, newCardData.owner._id);
+        const newCardElement = createCard(newCardData, window.userId, {
+          onLike: handleLike,
+          onImageClick: handleImageClick,
+          onDelete: handleDelete,
+        });
+
         placesList.prepend(newCardElement);
         closePopup(addPopup);
         formAddCard.reset();
@@ -148,15 +184,16 @@ function loadInitialData() {
       profileDescription.textContent = userData.about;
       profileImage.style.backgroundImage = `url(${userData.avatar})`;
 
-      const userId = userData._id;
       cardsData.forEach((card) => {
-        const cardElement = createCard(card, userId);
+        const cardElement = createCard(card, userData._id, {
+          onLike: handleLike,
+          onDelete: handleDelete,
+          onImageClick: handleImageClick,
+        });
         placesList.appendChild(cardElement);
       });
     })
-    .catch((err) => {
-      console.error("Ошибка при загрузке данных:", err);
-    });
+    .catch((err) => console.error("Ошибка при загрузке данных:", err));
 }
 
 function initializeValidation() {

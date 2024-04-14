@@ -1,13 +1,6 @@
-export const validationSettings = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
-
 // Функция, показывающая ошибку
+import { validationSettings } from "./index.js";
+
 const showInputError = (
   formElement,
   inputElement,
@@ -104,7 +97,7 @@ export const clearValidation = (formElement, validationSettings) => {
   const buttonElement = formElement.querySelector(
     validationSettings.submitButtonSelector,
   );
-  inputList.forEach((inputElement, validationSettings) => {
+  inputList.forEach((inputElement) => {
     hideInputError(formElement, inputElement, validationSettings);
     inputElement.value = "";
   });
